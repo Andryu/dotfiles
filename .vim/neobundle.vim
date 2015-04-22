@@ -11,14 +11,14 @@ if has('vim_starting')
   call neobundle#begin(expand('~/.vim/bundle'))
 
   if neobundle#has_fresh_cache(expand('~/.vimrc'))
-      NeoBundleLoadCache  " キャッシュの読込み
+    NeoBundleLoadCache  " キャッシュの読込み
   else
 
     NeoBundleFetch 'Shougo/neobundle.vim'
     if neobundle#exists_not_installed_bundles()
-        echomsg 'Not installed bundles : ' .
-                \ string(neobundle#get_not_installed_bundle_names())
-        echomsg 'Please execute ":NeoBundleInstall" command.' "finish
+      echomsg 'Not installed bundles : ' .
+        \ string(neobundle#get_not_installed_bundle_names())
+      echomsg 'Please execute ":NeoBundleInstall" command.' "finish
     endif
 
     " Basic
@@ -60,9 +60,9 @@ if has('vim_starting')
     "Installation check.
   endif
 
-    call neobundle#end()
-    NeoBundleSaveCache  " キャッシュの書込み
-    filetype plugin indent on
+  call neobundle#end()
+  NeoBundleSaveCache  " キャッシュの書込み
+  filetype plugin indent on
 endif
 
 
