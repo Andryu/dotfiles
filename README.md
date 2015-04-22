@@ -7,12 +7,18 @@ ex) yum install vim-enhanced
 
 # Usage
 
+## Vim
 cd dotfiles
 ./set_up
 
 vim
 
 :NeoBundleInstall
+
+## tmux
+
+vim ~/.tmux.conf
+source-file ~/dotfiles/.tmux.conf
 
 ## bashrc
 

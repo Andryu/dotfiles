@@ -25,7 +25,7 @@ augroup cch
 augroup END
 hi clear CursorLine
 hi CursorLine gui=underline
-highlight CursorLine ctermbg=white guibg=white
+highlight CursorLine term=none cterm=none ctermfg=none ctermbg=darkgray
 " /=Hilighting
 
 
