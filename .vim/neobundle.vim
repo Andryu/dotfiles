@@ -20,6 +20,7 @@ if has('vim_starting')
   endif
 endif
 
+call neobundle#begin(expand('~/.vim/bundle'))
 " Basic
 " vim-dispatch
 NeoBundle 'tpope/vim-dispatch.git'
@@ -57,3 +58,4 @@ NeoBundle 'https://github.com/scrooloose/syntastic.git'
 NeoBundle 'JavaScript-syntax'
 NeoBundle 'pangloss/vim-javascript'
 
+call neobundle#end()

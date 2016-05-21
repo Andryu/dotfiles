@@ -1,11 +1,12 @@
 "Color
+call neobundle#begin(expand('~/.vim/bundle'))
 NeoBundle "https://github.com/altercation/vim-colors-solarized.git"
 NeoBundle 'https://github.com/tpope/vim-vividchalk.git'
 NeoBundle 'https://github.com/Lokaltog/vim-distinguished.git'
 NeoBundle 'https://github.com/nanotech/jellybeans.vim.git'
 NeoBundle 'https://github.com/vim-scripts/candy.vim.git'
 NeoBundle 'https://github.com/dandorman/vim-colors.git'
-
+call neobundle#end()
 
 " Color settings
 set t_Co=256
