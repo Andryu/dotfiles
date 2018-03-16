@@ -36,3 +36,25 @@ depends = ['vim-airline-themes']
 # 依存関係を指定したからと言って、自動でインストールはされない（ここは NeoBundle と違う）
 [[plugins]]
 repo = 'vim-airline/vim-airline-themes'
+
+# Ruby
+[[plugins]]
+repo = 'altercation/vim-colors-solarized'
+[[plugins]]
+repo = 'tpope/vim-vividchalk'
+[[plugins]]
+repo = 'Lokaltog/vim-distinguished'
+[[plugins]]
+repo = 'nanotech/jellybeans.vim'
+[[plugins]]
+repo = 'vim-scripts/candy.vim'
+[[plugins]]
+repo = 'dandorman/vim-colors'
+
+# Syntax ALEとConflictしたので、コメントアウト
+#[[plugins]]
+#repo = 'vim-syntastic/syntastic'
+
+# 非同期ALE
+[[plugins]]
+repo = 'w0rp/ale'
