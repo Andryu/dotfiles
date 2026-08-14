@@ -41,10 +41,11 @@ API キーなどの秘密情報は **リポジトリに置かない**。`~/.zshr
 ## Claude Code の settings.json について
 
 `~/.claude/settings.json` は Claude Code 自身が書き換える（プラグイン有効化など）ため
-symlink せず、初回のみコピーする。設定を大きく変えたときは手動で同期する:
+symlink せず、初回のみコピーする。設定を大きく変えたときは手動で同期する。
+**同期時は必ずホームパスを `$HOME` に置換してから commit すること**（実名入りパスを公開しないため）:
 
 ```sh
-cp ~/.claude/settings.json ~/Workspace/dotfiles/claude/settings.json
+sed "s|$HOME|\$HOME|g" ~/.claude/settings.json > ~/Workspace/dotfiles/claude/settings.json
 ```
 
 hooks が参照するスクリプト（`~/.claude/hooks/*.sh`）や statusline は
