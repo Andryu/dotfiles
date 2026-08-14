@@ -1,0 +1,39 @@
+[user]
+	name = Andryu
+	email = shunsuke.andoh@gmail.com
+
+[core]
+	editor = vim
+
+[init]
+	defaultBranch = main
+
+[pull]
+	rebase = true
+
+[push]
+	default = current
+	autoSetupRemote = true
+
+[fetch]
+	prune = true
+
+[rebase]
+	autostash = true
+
+[diff]
+	algorithm = histogram
+
+[merge]
+	conflictstyle = zdiff3
+
+[alias]
+	st = status
+	br = branch
+	sw = switch
+	co = checkout
+	lg = log --oneline --graph --decorate --all -30
+
+# マシン固有の上書きは ~/.gitconfig.local へ（存在すれば読み込む）
+[include]
+	path = ~/.gitconfig.local

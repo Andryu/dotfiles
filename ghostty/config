@@ -1,0 +1,106 @@
+# Ghostty terminal config for cmux
+# cmux reload-config で即時反映される
+
+font-size = 16
+
+# herdr の theme = "tokyo-night" と揃える。
+# 揃えないと herdr の外枠とペイン中身が二色に割れる
+theme = TokyoNight Night
+
+# ==============================================================
+# herdr — cmux 互換キーバインド
+# --------------------------------------------------------------
+# macOS の Cmd はターミナルアプリに届かないので、Ghostty 側で
+# ESC + Ctrl+<文字> のバイト列に変換して herdr に渡す。
+# herdr からは ctrl+alt+<文字> として見える（~/.config/herdr/config.toml）。
+#
+# 対応表: Ctrl+A=\x01 B=\x02 ... Z=\x1a
+# \x09(Tab) \x0a(LF) \x0d(CR) は端末制御と衝突するので i/j/m は使わない。
+#
+# 注意: この keybind は Ghostty 全体に効く。herdr を起動していない
+# 素の Ghostty ウィンドウでも Cmd+T 等はこのシーケンスを送るため、
+# Ghostty ネイティブのタブ/分割は使えなくなる（herdr に一本化する前提）。
+# 不要になったらこのブロックごと削除すればデフォルトに戻る。
+# ==============================================================
+
+# ── herdr へのキー転送（CSI-u / kitty keyboard protocol）─────────
+# CSI <codepoint> ; <modifiers> u  の形式で「修飾キー付きの文字」を厳密に送る。
+# modifiers = 1 + shift(1) + alt(2) + ctrl(4)  → ctrl+alt=7 / ctrl+alt+shift=8
+#
+# ESC+制御バイト方式（text:\x1b\x04）は herdr が解釈せず、Ctrl+D がペインに
+# 素通りしてシェルを落とす事故になった。CSI-u はコードポイントを直接送るので
+# その手の衝突が原理的に起きない。実測で両方式とも動作を確認済み。
+# ─────────────────────────────────────────────────────────────
+
+# ── タブ ──
+# new_tab
+keybind = cmd+t=csi:116;7u
+# close_tab
+keybind = cmd+w=csi:119;7u
+# rename_tab
+keybind = cmd+r=csi:114;7u
+
+# ── ペイン ──
+# split_vertical
+keybind = cmd+d=csi:100;7u
+# split_horizontal
+keybind = cmd+shift+d=csi:100;8u
+# close_pane
+keybind = cmd+shift+x=csi:120;8u
+# zoom
+keybind = cmd+shift+enter=csi:13;8u
+
+# ペイン移動は ctrl+alt+矢印。alt+矢印 だとシェルの単語移動と衝突する
+keybind = alt+cmd+left=csi:1;7D
+keybind = alt+cmd+right=csi:1;7C
+keybind = alt+cmd+up=csi:1;7A
+keybind = alt+cmd+down=csi:1;7B
+
+# ── ワークスペース ──
+# new_workspace
+keybind = cmd+n=csi:110;7u
+# workspace_picker
+keybind = cmd+p=csi:112;7u
+# close_workspace
+keybind = cmd+shift+w=csi:119;8u
+# rename_workspace
+keybind = cmd+shift+r=csi:114;8u
+
+# Cmd+1..9 → ctrl+alt+1..9。論理キーと物理キーの両方を潰さないと
+# Ghostty 標準の goto_tab が生き残る
+keybind = cmd+one=csi:49;7u
+keybind = cmd+two=csi:50;7u
+keybind = cmd+three=csi:51;7u
+keybind = cmd+four=csi:52;7u
+keybind = cmd+five=csi:53;7u
+keybind = cmd+six=csi:54;7u
+keybind = cmd+seven=csi:55;7u
+keybind = cmd+eight=csi:56;7u
+keybind = cmd+nine=csi:57;7u
+keybind = cmd+physical:one=csi:49;7u
+keybind = cmd+physical:two=csi:50;7u
+keybind = cmd+physical:three=csi:51;7u
+keybind = cmd+physical:four=csi:52;7u
+keybind = cmd+physical:five=csi:53;7u
+keybind = cmd+physical:six=csi:54;7u
+keybind = cmd+physical:seven=csi:55;7u
+keybind = cmd+physical:eight=csi:56;7u
+keybind = cmd+physical:nine=csi:57;7u
+
+# ── worktree ──
+# new_worktree
+keybind = cmd+shift+g=csi:103;8u
+# open_worktree
+keybind = cmd+g=csi:103;7u
+
+# ── エージェント間移動 ──
+# next_agent
+keybind = cmd+shift+j=csi:106;8u
+# previous_agent
+keybind = cmd+shift+k=csi:107;8u
+
+# ── UI ──
+# toggle_sidebar
+keybind = cmd+b=csi:98;7u
+# 検証で使ったが本番では未使用
+keybind = cmd+e=ignore

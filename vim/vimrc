@@ -1,0 +1,18 @@
+" プラグインなしの最小構成（メインエディタは VS Code / AI エージェント）
+set encoding=utf-8
+set number
+set expandtab
+set tabstop=2
+set shiftwidth=2
+set autoindent
+set smartindent
+set incsearch
+set hlsearch
+set ignorecase
+set smartcase
+set backspace=indent,eol,start
+set laststatus=2
+set wildmenu
+set clipboard=unnamed
+syntax enable
+set background=dark

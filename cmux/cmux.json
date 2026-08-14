@@ -1,0 +1,38 @@
+{
+  "$schema": "https://raw.githubusercontent.com/manaflow-ai/cmux/main/web/data/cmux.schema.json",
+  "schemaVersion": 1,
+
+  "sidebar": {
+    "showProgress": true,
+    "showNotificationMessage": true,
+    "showLog": true,
+    "showPullRequests": true,
+    "showCustomMetadata": true,
+    "showBranchDirectory": true,
+    "showSSH": false,
+    "showPorts": false,
+    "branchLayout": "inline",
+    "wrapWorkspaceTitles": false
+  },
+
+  "app": {
+    "newWorkspacePlacement": "end"
+  },
+
+  "workspaceGroups": {
+    "byCwd": {
+      "~/Workspace/agent-crew": {
+        "color": "#1565C0",
+        "icon": "cpu"
+      },
+      "~/Workspace/mcp": {
+        "color": "#6A1B9A",
+        "icon": "network"
+      },
+      "~/Workspace": {
+        "color": "#196F3D",
+        "icon": "folder.fill"
+      }
+    }
+  }
+}

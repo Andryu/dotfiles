@@ -1,0 +1,45 @@
+# zsh メイン設定（~/.zshrc からシンボリックリンクされる）
+export DOTFILES="$HOME/Workspace/dotfiles"
+
+# --- PATH ---
+export PATH="$HOME/.local/bin:$PATH"                      # uv / uvx / claude
+export PATH="$HOME/.antigravity/antigravity/bin:$PATH"    # Antigravity
+
+# --- 履歴 ---
+HISTFILE="$HOME/.zsh_history"
+HISTSIZE=100000
+SAVEHIST=100000
+setopt share_history          # 複数ペイン間で履歴を共有（cmux/herdr 並列運用前提）
+setopt hist_ignore_all_dups
+setopt hist_reduce_blanks
+setopt hist_ignore_space      # 先頭スペースのコマンドは履歴に残さない（キー入力時等）
+
+# --- 補完 ---
+fpath=(~/.zsh/completions $fpath)   # herdr
+autoload -Uz compinit && compinit
+zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'   # 小文字入力で大文字にもマッチ
+
+# --- プロンプト（git ブランチ表示）---
+autoload -Uz vcs_info
+precmd() { vcs_info }
+zstyle ':vcs_info:git:*' formats ' %F{red}(%b)%f'
+zstyle ':vcs_info:git:*' actionformats ' %F{red}(%b|%a)%f'
+setopt prompt_subst
+PROMPT='%F{green}%n%f:%F{blue}%~%f${vcs_info_msg_0_} %# '
+
+# --- AI エージェント開発 ---
+export CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS=1   # cmux x claude code
+
+# Claude Code → Ollama フォールバック
+alias claude-local='ANTHROPIC_BASE_URL=http://localhost:11434 ANTHROPIC_API_KEY=ollama claude --model qwen2.5-ja'
+alias claude-fast='ANTHROPIC_BASE_URL=http://localhost:11434 ANTHROPIC_API_KEY=ollama claude --model llama3.1:8b'
+
+# --- ツール連携（入っていれば有効化）---
+command -v fzf >/dev/null && source <(fzf --zsh)
+command -v pyenv >/dev/null && eval "$(pyenv init -)"
+
+# --- 分割ファイル ---
+source "$DOTFILES/zsh/aliases.zsh"
+
+# --- マシン固有・秘密情報（リポジトリ管理外。API キーはここへ）---
+[ -f "$HOME/.zshrc.local" ] && source "$HOME/.zshrc.local"

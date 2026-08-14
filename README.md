@@ -1,53 +1,58 @@
-# Dotfiles
+# dotfiles
 
-install vim and setting vimrc
+AI エージェント開発を中心とした macOS 開発環境の設定。
+シンボリックリンク方式で `install.sh` から冪等に適用する。
 
-Please install vim-enhanced
-ex) yum install vim-enhanced
+（旧構成: NeoBundle 時代の Vim 中心構成 → `dotfiles-dein` → 本構成に刷新）
 
-# Usage
-
-## Vim
-cd dotfiles
-./set_up
-
-vim
-
-:NeoBundleInstall
-
-## tmux
-
-vim ~/.tmux.conf
-source-file ~/dotfiles/.tmux.conf
-
-## bashrc
-
-vim ~/.bashrc
-source ~/dotfiles/alias.sh
-
-## Notice
-open vim and alert
+## 構成
 
 ```
-Unfortunately, zencoding-vim was moved to emmet-vim, please use it.
+dotfiles/
+├── install.sh        # シンボリックリンクを張る（既存は ~/.dotfiles_backup/ に退避）
+├── Brewfile          # brew bundle 用のツール一覧
+├── zsh/              # ~/.zshrc（履歴・補完・プロンプト・AI エージェント用エイリアス）
+├── git/              # ~/.gitconfig と ~/.config/git/ignore
+├── tmux/             # ~/.tmux.conf（tmux 3.x。SSH 先・保険用）
+├── vim/              # ~/.vimrc（プラグインなし最小構成）
+├── ghostty/          # ~/.config/ghostty/config（herdr 連携キーバインド込み）
+├── herdr/            # ~/.config/herdr/config.toml（cmux 互換キーバインド）
+├── cmux/             # ~/.config/cmux/{cmux.json,settings.json}
+└── claude/           # ~/.claude/CLAUDE.md（グローバル指示）と settings.json（参照コピー）
 ```
-mv ~/.vim/bundle/zencoding ~/.vim/bundle/emmet-vim
 
+## セットアップ
 
-# History
-* ver 1.0.0
-  - defaultのsnipettは利用できなくなった
-  - 以下を追記
-  - NeoBundle "Shougo/neosnippet"
-  - NeoBundle "Shougo/neosnippet-snippets"
+```sh
+git clone <this repo> ~/Workspace/dotfiles
+cd ~/Workspace/dotfiles
+./install.sh
+brew bundle --file Brewfile
+```
 
-* ver 1.1.0
-  - unite vim設定追加 ,ua,ub,uf -> tabopne C-t
-  - Log Color Ansi追加
-  - Ruby End追加
-  - Ggrep検索追加まだ開発途中
+Brewfile 管理外のツール（uv / claude / ollama）の導入コマンドは Brewfile 末尾のコメント参照。
 
-* ver 1.1.1
-  - airline追加
-  - statuslineを表示
+## 秘密情報の扱い
 
+API キーなどの秘密情報は **リポジトリに置かない**。`~/.zshrc.local` に書く
+（`install.sh` が初回に `zsh/zshrc.local.example` からテンプレートをコピーする）。
+マシン固有の git 設定は `~/.gitconfig.local` に書く。
+
+## Claude Code の settings.json について
+
+`~/.claude/settings.json` は Claude Code 自身が書き換える（プラグイン有効化など）ため
+symlink せず、初回のみコピーする。設定を大きく変えたときは手動で同期する:
+
+```sh
+cp ~/.claude/settings.json ~/Workspace/dotfiles/claude/settings.json
+```
+
+hooks が参照するスクリプト（`~/.claude/hooks/*.sh`）や statusline は
+agent-crew 側で管理しているため、このリポジトリには含めない。
+
+## ターミナル環境のメモ
+
+- **cmux / herdr / Ghostty** は 3 点でキーバインドを整合させている。
+  herdr のテーマ（tokyo-night）と Ghostty のテーマ（TokyoNight Night）は揃えること。
+  詳細は各設定ファイル内のコメント参照。
+- tmux は SSH 先などでの利用が主。ローカルのエージェント並列運用は cmux / herdr。
