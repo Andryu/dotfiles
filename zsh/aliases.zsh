@@ -27,3 +27,4 @@ command -v bat >/dev/null && alias cat="bat --paging=never"
 # --- dotfiles ---
 alias dot='cd $DOTFILES'
 alias zr='source ~/.zshrc'
+alias dotsync='$DOTFILES/sync.sh --push'   # 設定の取り込み→スキャン→コミット→push

@@ -10,6 +10,8 @@ AI エージェント開発を中心とした macOS 開発環境の設定。
 ```
 dotfiles/
 ├── install.sh        # シンボリックリンクを張る（既存は ~/.dotfiles_backup/ に退避）
+├── sync.sh           # コピー管理ファイル取り込み＋秘密情報スキャン＋commit/push（alias: dotsync）
+├── CLAUDE.md         # このリポジトリの運用ルール（ファイル追加手順・秘密情報ルール）
 ├── Brewfile          # brew bundle 用のツール一覧
 ├── zsh/              # ~/.zshrc（履歴・補完・プロンプト・AI エージェント用エイリアス）
 ├── git/              # ~/.gitconfig と ~/.config/git/ignore
@@ -41,12 +43,18 @@ API キーなどの秘密情報は **リポジトリに置かない**。`~/.zshr
 ## Claude Code の settings.json について
 
 `~/.claude/settings.json` は Claude Code 自身が書き換える（プラグイン有効化など）ため
-symlink せず、初回のみコピーする。設定を大きく変えたときは手動で同期する。
-**同期時は必ずホームパスを `$HOME` に置換してから commit すること**（実名入りパスを公開しないため）:
+symlink せず、`sync.sh` が取り込む（実名入りホームパスは `$HOME` に自動置換される）。
 
-```sh
-sed "s|$HOME|\$HOME|g" ~/.claude/settings.json > ~/Workspace/dotfiles/claude/settings.json
-```
+## 日常の同期フロー
+
+symlink 管理のファイルは `~` 側を編集すればそのままリポジトリに反映されるので、
+あとは `dotsync`（= `./sync.sh --push`）を打つだけでよい:
+
+1. コピー管理ファイル（`~/.claude/settings.json`）をサニタイズして取り込み
+2. staged 差分を秘密情報スキャン（検出したら中止）
+3. コミットして push
+
+新しい設定ファイルを管理下に追加する手順は `CLAUDE.md` 参照。
 
 hooks が参照するスクリプト（`~/.claude/hooks/*.sh`）や statusline は
 agent-crew 側で管理しているため、このリポジトリには含めない。
