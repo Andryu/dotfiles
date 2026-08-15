@@ -3,6 +3,24 @@
 
 font-size = 16
 
+# macOS でのストローク太らせ。Terminal.app / iTerm2 は標準でやっているが
+# Ghostty は false がデフォルトで、暗背景に明るい細字が痩せて見える原因になる。
+# 本文色 #c0caf5 は背景 #1a1b26 に対して 10.6:1（WCAG AAA 超え）あるので、
+# 読みづらさはコントラスト不足ではなく線の細さだった
+font-thicken = true
+
+# 1行目が英数字、2行目以降がフォールバック。日本語を明示しないとシステム任せの
+# 細いゴシックに落ちて、画数の多い字が 16px でつぶれる。
+# BIZ UDGothic は macOS 同梱のユニバーサルデザインフォント（Bold もあり）
+font-family = JetBrains Mono
+font-family = BIZ UDGothic
+
+# 指定比を下回る前景色を自動で持ち上げる。本文ではなく補助テキスト向け。
+# palette 8 (#414868) が 1.9:1、コメント色 (#565f89) が 2.8:1 しかなく、
+# recap 行や "Cooked for 57s" が実質読めなかった。
+# 全色に効くので配色は多少変わる。強すぎると感じたらこの行だけ消す（4.5 は変化が大きい）
+minimum-contrast = 3
+
 # herdr の theme = "tokyo-night" と揃える。
 # 揃えないと herdr の外枠とペイン中身が二色に割れる
 theme = TokyoNight Night
