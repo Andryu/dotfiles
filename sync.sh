@@ -13,6 +13,21 @@ if [ -f "$HOME/.claude/settings.json" ]; then
   sed "s|$HOME|\$HOME|g" "$HOME/.claude/settings.json" > claude/settings.json
 fi
 
+# --- Brewfile の乖離チェック（警告のみ。判断は人間がする）---
+# brew で入れたが Brewfile / Brewfile.personal のどちらにも書かれていないものを出す。
+# 出たら Brewfile（共通）か Brewfile.personal（自宅のみ）に追記するか、brew uninstall する。
+if command -v brew >/dev/null; then
+  declared="$(grep -hoE '^(brew|cask|tap) "[^"]+"' Brewfile Brewfile.personal 2>/dev/null \
+    | sed -E 's/^[a-z]+ "([^"]+)"/\1/' | sort -u)"
+  installed="$( { brew leaves; brew list --cask; } 2>/dev/null | sort -u)"
+  untracked="$(comm -23 <(echo "$installed") <(echo "$declared"))"
+  if [ -n "$untracked" ]; then
+    echo "WARN: Brewfile 未記載のパッケージ（Brewfile か Brewfile.personal に追記を検討）:"
+    echo "$untracked" | sed 's/^/  - /'
+    echo ""
+  fi
+fi
+
 # --- 差分表示 ---
 if [ -z "$(git status --porcelain)" ]; then
   echo "差分なし。同期済み"
@@ -29,8 +44,10 @@ if [ "${1:-}" != "--push" ]; then
 fi
 
 # --- 秘密情報スキャン（実名はスクリプトに書かず実行時に導出する）---
+# api_key / secret / token は「直後に = や : で値が続く」形だけ検出する。
+# 単語単体だと Claude Code が settings.json に書く説明文（"Secrets management: None"）に誤検知する
 git add -A
-if git diff --cached | grep -iE "api_key|secret|AIza|BEGIN.*PRIVATE|192\.168\.|$(whoami)"; then
+if git diff --cached | grep -v 'grep -iE' | grep -iE "api[_-]?key[a-z_]*\s*[\"']?\s*[:=]|secret[a-z_]*\s*[\"']?\s*[:=]|token[a-z_]*\s*[\"']?\s*[:=]|AIza|BEGIN.*PRIVATE|192\.168\.|$(whoami)"; then
   echo "NG: 秘密情報らしき文字列を検出したためコミットを中止した（上記の行を確認）" >&2
   git reset -q
   exit 1

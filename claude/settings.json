@@ -142,15 +142,6 @@
         "hooks": [
           {
             "type": "command",
-            "command": "if [ -f '$HOME/.orca/agent-hooks/claude-hook.sh' ] && [ -r '$HOME/.orca/agent-hooks/claude-hook.sh' ] && [ -x '$HOME/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '$HOME/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
-            "timeout": 10
-          }
-        ]
-      },
-      {
-        "hooks": [
-          {
-            "type": "command",
             "command": "bash \"$HOME/Workspace/Obsidian/.claude/hooks/capture-session.sh\""
           }
         ]
@@ -160,6 +151,15 @@
           {
             "type": "command",
             "command": "bash \"$HOME/Workspace/Obsidian/.claude/hooks/inbox-check.sh\""
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if [ -f '$HOME/.orca/agent-hooks/claude-hook.sh' ] && [ -r '$HOME/.orca/agent-hooks/claude-hook.sh' ] && [ -x '$HOME/.orca/agent-hooks/claude-hook.sh' ]; then /bin/sh '$HOME/.orca/agent-hooks/claude-hook.sh'; else cat >/dev/null 2>&1 || :; fi",
+            "timeout": 10
           }
         ]
       }
@@ -265,13 +265,42 @@
   "effortLevel": "high",
   "tui": "fullscreen",
   "voice": {
-    "enabled": false
+    "enabled": true,
+    "mode": "hold"
   },
   "skipDangerousModePermissionPrompt": true,
   "theme": "light",
   "remoteControlAtStartup": true,
   "agentPushNotifEnabled": true,
-  "voiceEnabled": false,
+  "autoMode": {
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: assume private unless the remote host and repo name indicate otherwise, or a visibility check in the transcript shows public — not queryable here, and this repo has no remote configured",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: None configured",
+      "**Default / protected branches**: not queryable here (no remote configured for this repo)",
+      "**CI/CD deploy targets**: None configured",
+      "**Network posture**: None configured",
+      "**Source control**: The trusted repo (local Obsidian vault at $HOME/Workspace/Obsidian, no remote configured) only — no additional orgs configured",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: None configured",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: any file or store holding personal data, confidential business data, credentials, regulated data, or similarly sensitive material; preserve exact handles when known and share only with audiences cleared at the [named+specifics] bar",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment (hyphen/underscore/dot-delimited — e.g. matches `prod-db`, not `producer`)",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: personal knowledge management — this repo is an Obsidian vault (plain Markdown notes), not a software project; agent conventions are defined in ./CLAUDE.md (Japanese-language responses required per ~/.claude/CLAUDE.md)",
+      "**Trusted repo**: The git repository at $HOME/Workspace/Obsidian (its working directory) — no remote configured, so treat as local-only; per CLAUDE.md, sync with Notion is one-way (vault → Notion) and Notion content must never be written back",
+      "**Org-specific CLIs**: None configured",
+      "routine under this vault's inbox/, daily/, projects/, knowledge/, decisions/, attachments/, archive/, templates/ folders per the documented workflow in ./CLAUDE.md"
+    ]
+  },
+  "voiceEnabled": true,
   "mcpServers": {
     "obsidian-vault": {
       "command": "node",

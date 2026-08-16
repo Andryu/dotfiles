@@ -12,7 +12,8 @@ dotfiles/
 ├── install.sh        # シンボリックリンクを張る（既存は ~/.dotfiles_backup/ に退避）
 ├── sync.sh           # コピー管理ファイル取り込み＋秘密情報スキャン＋commit/push（alias: dotsync）
 ├── CLAUDE.md         # このリポジトリの運用ルール（ファイル追加手順・秘密情報ルール）
-├── Brewfile          # brew bundle 用のツール一覧
+├── Brewfile          # brew bundle 用のツール一覧（自宅・仕事 共通）
+├── Brewfile.personal # 自宅マシンだけに入れるもの（Discord 等）
 ├── zsh/              # ~/.zshrc（履歴・補完・プロンプト・AI エージェント用エイリアス）
 ├── git/              # ~/.gitconfig と ~/.config/git/ignore
 ├── tmux/             # ~/.tmux.conf（tmux 3.x。SSH 先・保険用）
@@ -23,16 +24,45 @@ dotfiles/
 └── claude/           # ~/.claude/CLAUDE.md（グローバル指示）と settings.json（参照コピー）
 ```
 
-## セットアップ
+## セットアップ（新しいマシン・仕事マシン）
 
 ```sh
-git clone <this repo> ~/Workspace/dotfiles
+# 1. Homebrew（未導入なら）
+/bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+
+# 2. clone して symlink を張る
+git clone https://github.com/Andryu/dotfiles.git ~/Workspace/dotfiles
 cd ~/Workspace/dotfiles
 ./install.sh
+
+# 3. ツール一式（共通）。自宅なら Brewfile.personal も
 brew bundle --file Brewfile
+# brew bundle --file Brewfile.personal
+
+# 4. Brewfile 管理外（導入コマンドは Brewfile 末尾のコメント参照）
+#    uv / claude / ollama
+
+# 5. マシン固有の設定（リポジトリ管理外）
+$EDITOR ~/.zshrc.local      # API キー・内部 IP・仕事用エイリアス
+$EDITOR ~/.gitconfig.local  # 仕事用のメールアドレス等（[user] セクション）
 ```
 
-Brewfile 管理外のツール（uv / claude / ollama）の導入コマンドは Brewfile 末尾のコメント参照。
+再起動後の確認: Ghostty を開き herdr を起動 → `Cmd+D` で分割できれば
+Ghostty → herdr のキー転送（CSI-u）が効いている。文字が滲む・罫線が崩れる場合は
+`brew list --cask font-plemol-jp` でフォントが入っているか確認する。
+
+Brewfile の乖離は `./sync.sh` 実行時に「Brewfile 未記載」として警告される
+（brew で新しく入れたら Brewfile / Brewfile.personal のどちらかに追記する）。
+
+### 仕事マシンで置き換えるもの
+
+| 項目 | 場所 | 備考 |
+|---|---|---|
+| git のメール・署名 | `~/.gitconfig.local` | `git/gitconfig` から include される |
+| API キー・社内ホスト | `~/.zshrc.local` | リポジトリには絶対に置かない |
+| cmux のワークスペース色分け | `cmux/cmux.json` の `workspaceGroups.byCwd` | 仕事のリポジトリパスに合わせて追記 |
+| herdr の worktree 置き場 | `herdr/config.toml` の `[worktrees] directory` | `~/Workspace/.worktrees` 前提 |
+| Claude Code の hooks | `claude/settings.json` | agent-crew / Obsidian のパスを参照している。無いものは効かないだけなので害はない |
 
 ## 秘密情報の扱い
 
@@ -64,4 +94,8 @@ agent-crew 側で管理しているため、このリポジトリには含めな
 - **cmux / herdr / Ghostty** は 3 点でキーバインドを整合させている。
   herdr のテーマ（tokyo-night）と Ghostty のテーマ（TokyoNight Night）は揃えること。
   詳細は各設定ファイル内のコメント参照。
+- Ghostty → herdr のキー転送は CSI-u（kitty keyboard protocol）。ESC+制御バイト方式は
+  Ctrl+D が素通りしてシェルが落ちる事故があったので使わない。
+- フォントは合成済みの **PlemolJP Console** を 1 つだけ指定する（2 フォント並記は罫線が崩れる）。
+  font-size は半角送り幅が整数 px に乗る 17 / 19 を選ぶ（根拠は `ghostty/config` のコメント）。
 - tmux は SSH 先などでの利用が主。ローカルのエージェント並列運用は cmux / herdr。

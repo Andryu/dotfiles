@@ -1,7 +1,28 @@
 # Ghostty terminal config for cmux
 # cmux reload-config で即時反映される
 
-font-size = 16
+# 17 は font-family の PlemolJP Console と相性が良い値。
+# 半角送り 0.528em × 17 = 8.976px → 9px で誤差 0.3%（16 だと 8.448px → 8px で 5.3%）。
+# 端数が出るとグリフが圧縮されて輪郭が甘くなるため、フォントを変えたら
+# このサイズも合わせて見直すこと。19 も同様に綺麗に乗る
+font-size = 17
+
+# PlemolJP = IBM Plex Mono（英数字）＋ IBM Plex Sans JP（日本語）の合成。
+# brew install --cask font-plemol-jp
+#
+# 「Console」付きを選ぶこと。無印は ─ │ ◆ を全角で持っており TUI が崩れる。
+# 実測: 半角0.528em / 全角ちょうど2.00倍 / ─ │ ◆ ▸ ❯ すべて半角
+#
+# 半角が 0.5em ではなく 0.528em なので、同じ font-size でも日本語が
+# UDEV Gothic や BIZ UD 系より大きく描画される。これが可読性の体感差。
+#
+# HackGen（白源）も同条件で試したが、日本語側が源柔ゴシック＝丸ゴシックで
+# 輪郭が甘く「解像度が落ちた」印象になった。IBM Plex 系は角が立っていて硬質。
+#
+# 2フォントを font-family の並記でフォールバックさせる方式は破綻する
+# （2026-08-15 に実際に失敗）。別々のフォントは文字送り幅が揃わず、
+# ◆ や罫線が全角に化けて表示が崩れた。必ず合成済みフォントを1つ指定すること。
+font-family = PlemolJP Console
 
 # herdr の theme = "tokyo-night" と揃える。
 # 揃えないと herdr の外枠とペイン中身が二色に割れる

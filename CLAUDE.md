@@ -21,5 +21,7 @@
 - 実名を含むホームパスは `$HOME` に置換してからコミットする
 - 内部 IP・ssh 接続先はリポジトリに置かない → `~/.zshrc.local` へ
 - コミット前に必ず staged 差分を秘密情報スキャンする（`sync.sh` に組み込み済み。
-  手動コミット時は `git diff --cached | grep -iE "api_key|secret|AIza|192\.168\.|$(whoami)"`）
+  手動コミット時は `sync.sh` 内の grep と同じ正規表現を使う）
+- brew で何か入れたら `Brewfile`（共通）か `Brewfile.personal`（自宅のみ）に追記する。
+  `./sync.sh` が未記載を警告する
 - このリポジトリは **公開リポジトリ**（github.com/Andryu/dotfiles）
