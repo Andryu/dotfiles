@@ -13,9 +13,3 @@ brew "ffmpeg"
 
 # --- 趣味 ---
 cask "cemu"               # TI-84 Plus CE エミュレータ
-
-# --- フォント比較で入れたもの（PlemolJP に決めたので削除候補）---
-cask "font-hackgen"
-cask "font-udev-gothic"
-cask "font-cica"
-cask "font-ricty-diminished"
