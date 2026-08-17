@@ -45,6 +45,16 @@ brew bundle --file Brewfile
 # 5. マシン固有の設定（リポジトリ管理外）
 $EDITOR ~/.zshrc.local      # API キー・内部 IP・仕事用エイリアス
 $EDITOR ~/.gitconfig.local  # 仕事用のメールアドレス等（[user] セクション）
+
+# 6. herdr × Claude Code 連携（claude 導入後）
+herdr integration install claude          # ~/.claude/hooks/herdr-agent-state.sh を置き
+                                          # settings.json に SessionStart hook を追加。
+                                          # Claude のセッション ID を herdr に通知し、
+                                          # herdr 再起動時のネイティブ復帰
+                                          # （resume_agents_on_restore）を可能にする
+npx skills add herdrdev/herdr --skill herdr -g   # herdr スキル（Claude から herdr の
+                                          # ペイン/タブ/他エージェントを CLI 操作）
+herdr integration status                  # claude: current になっていれば OK
 ```
 
 再起動後の確認: Ghostty を開き herdr を起動 → `Cmd+D` で分割できれば
@@ -87,7 +97,8 @@ symlink 管理のファイルは `~` 側を編集すればそのままリポジ�
 新しい設定ファイルを管理下に追加する手順は `CLAUDE.md` 参照。
 
 hooks が参照するスクリプト（`~/.claude/hooks/*.sh`）や statusline は
-agent-crew 側で管理しているため、このリポジトリには含めない。
+agent-crew 側で管理しているため、このリポジトリには含めない
+（`herdr-agent-state.sh` だけは `herdr integration install claude` が生成・更新する）。
 
 ## ターミナル環境のメモ
 
